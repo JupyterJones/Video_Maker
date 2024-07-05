@@ -1,0 +1,26 @@
+<!-- search.html -->
+{% extends 'base_.html' %}
+
+{% block title %}Search Results - My Blog{% endblock %}
+
+{% block content %}
+<h1>Search</h1>
+<form action="{{ url_for('search') }}" method="post">
+    <label for="search_terms">Search for (comma-separated):</label>
+    <input type="text" id="search_terms" name="search_terms" required>
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+<h2>Search Results</h2>
+<ul>
+    {% for result in results %}
+    <li>
+        <pre>{{ result }}</pre>
+       
+</ul>
+{% endfor %}
+{% else %}
+<p>No results found.</p>
+{% endif %}
+{% endblock %}

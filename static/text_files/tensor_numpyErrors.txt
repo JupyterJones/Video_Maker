@@ -1,0 +1,15 @@
+ Successfully uninstalled numpy-1.26.4
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+georasters 0.5.23 requires GDAL, which is not installed.
+thinc 8.1.5 requires pydantic!=1.8,!=1.8.1,<1.11.0,>=1.7.4, but you have pydantic 2.7.1 which is incompatible.
+tf-nightly 2.11.0.dev20221006 requires protobuf<3.20,>=3.9.2, but you have protobuf 3.20.0 which is incompatible.
+tensorflow 2.11.0 requires protobuf<3.20,>=3.9.2, but you have protobuf 3.20.0 which is incompatible.
+tensorboardx 2.6.1 requires protobuf>=4.22.3, but you have protobuf 3.20.0 which is incompatible.
+tensorboard 2.10.1 requires protobuf<3.20,>=3.9.2, but you have protobuf 3.20.0 which is incompatible.
+streamlit 1.26.0 requires pillow<10,>=7.1.0, but you have pillow 10.2.0 which is incompatible.
+spacy 3.4.2 requires pydantic!=1.8,!=1.8.1,<1.11.0,>=1.7.4, but you have pydantic 2.7.1 which is incompatible.
+spacy 3.4.2 requires typer<0.5.0,>=0.3.0, but you have typer 0.12.3 which is incompatible.
+scipy 1.12.0 requires numpy<1.29.0,>=1.22.4, but you have numpy 1.22.3 which is incompatible.
+pandas 2.1.0 requires numpy>=1.22.4; python_version < "3.11", but you have numpy 1.22.3 which is incompatible.
+diffusers 0.7.2 requires Pillow<10.0, but you have pillow 10.2.0 which is incompatible.
+Successfully installed numpy-1.22.3

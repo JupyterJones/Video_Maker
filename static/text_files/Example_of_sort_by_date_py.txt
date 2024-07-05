@@ -1,0 +1,17 @@
+@app.route("/editor", methods=["GET", "POST"])
+def editor():
+    if request.method == "POST":
+        filename = request.form["filename"]
+        text = request.form["text"]
+        save_text_to_file(filename, text)
+        return redirect(url_for("editor"))
+    else:
+        #files = os.listdir(TEXT_FILES_DIR)
+        #files = files.sort(key=lambda x: os.path.getmtime(x))
+        files = sorted(
+                [file for file in os.listdir(TEXT_FILES_DIR) if os.path.isfile(os.path.join(TEXT_FILES_DIR, file))],
+                key=lambda x: os.path.getmtime(os.path.join(TEXT_FILES_DIR, x)),reverse=True)
+
+        logit(files)
+        #files = sort_files_by_date(TEXT_FILES_DIR)
+        return render_template("editor1.html", files=files)

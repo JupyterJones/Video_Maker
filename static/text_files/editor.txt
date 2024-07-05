@@ -1,0 +1,26 @@
+<!-- templates/editor.html -->
+{% extends 'base_.html' %}
+
+{% block title %}Search Results - My Blog{% endblock %}
+
+{% block content %}
+    <h1>Edit Text File - {{ filename }}</h1>
+
+    {% if files %}
+    {% for filename in files %}
+<li><a href = "static/text_files/{{ filename }}">{{ filename }}</a></li>
+    
+{% endfor %}
+    {% endif %}
+
+
+
+    
+    <form action="{{ url_for('edit', filename=filename) }}" method="post">
+        <label for="filename">Filename:</label><br>
+        <input type="text" id="filename" name="filename" value="{{ filename }}" required><br><br>
+        <label for="text">Text:</label><br>
+        <textarea id="text" name="text" rows="20" cols="120" required>{{ text }}</textarea><br><br>
+        <button type="submit">Save Changes</button>
+    </form>
+    {% endblock %}

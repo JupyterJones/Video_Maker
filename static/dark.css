@@ -1,0 +1,348 @@
+/* Dark Theme */
+body {
+    background-color: #282c34;
+    /* Dark gray/blue */
+    color: #abb2bf;
+    /* Light gray for text */
+    font-family: Arial, sans-serif;
+    /* add backgroun image static/assets/background.png*/
+    background-image: url('assets/background.png');
+}
+
+/* Headers and links */
+h1,
+h2,
+h3 {
+    color: #61afef;
+    /* Light blue */
+}
+
+a {
+    color: #e06c75;
+    /* Salmon pink */
+}
+
+a:hover {
+    color: #be5046;
+    /* Darker salmon pink on hover */
+}
+
+/* Container backgrounds */
+.container {
+    background-color: #3e4451;
+    /* Darker gray/blue */
+    padding: 20px;
+    border-radius: 5px;
+}
+
+/* Code blocks */
+pre {
+    background-color: #1e222a;
+    /* Darker background for code blocks */
+    color: lightgreen;
+    /* Light green for code text */
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    /* Enable horizontal scroll for long code lines */
+    /* white-space: pre-wrap; */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-size: 16px;
+}
+
+/* Buttons */
+.btn {
+    background-color: #61afef;
+    /* Light blue */
+    color: #282c34;
+    /* Dark background color for button text */
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #518aba;
+    /* Slightly darker blue on hover */
+}
+
+/* Forms */
+input[type=text],
+textarea {
+    background-color: #2c313a;
+    /* Dark gray/blue for input fields */
+    color: #abb2bf;
+    /* Light gray text */
+    border: 1px solid #61afef;
+    /* Light blue border */
+    padding: 8px;
+    border-radius: 5px;
+}
+
+input[type=submit] {
+    background-color: #61afef;
+    /* Light blue */
+    color: #282c34;
+    /* Dark background color for button text */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+input[type=submit]:hover {
+    background-color: #518aba;
+    /* Slightly darker blue on hover */
+}
+
+input[type=texy] {
+    color: lightgreen;
+}
+
+textarea {
+
+    color: lightgreen;
+    /* Light green for code text */
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    /* Enable horizontal scroll for long code lines */
+    /* white-space: pre-wrap; */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-size: 16px;
+
+}
+
+span {
+    color: lightgreen;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.note {
+    color: rgb(255, 213, 0);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Add this to your CSS file */
+
+.inline-form input[type="text"],
+.inline-form input[type="submit"] {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.inline-form {
+    display: inline-block;
+}
+
+textarea {
+    background-color: #2c313a;
+    /* Dark gray/blue for input fields */
+    color: #1fff02;
+    /* Light gray text */
+    border: 1px solid #61afef;
+    /* Light blue border */
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 5px;
+    width: 48%;
+    height: 600px;
+}
+
+ur {
+    color: lightgreen;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 10px;
+    /* Adjust spacing between items as needed */
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    /* Example text color */
+    padding: 5px 10px;
+    /* Additional styling for links */
+}
+
+img {
+    width: 200px;
+    height: auto;
+    border: #d2cece 15px solid;
+}
+
+
+a {
+    color: rgb(255, 213, 0);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+hr {
+    border: 1px solid #56585a;
+    /* Light blue */
+    width: 75%;
+    margin-top: 10px;
+}
+
+pre {
+    color: lightgreen;
+    font-size: 24px;
+    font-weight: bold;
+
+    background-color: #2c313a;
+    /* Dark gray/blue for input fields */
+    color: #1fff02;
+    /* Light gray text */
+    border: 1px solid #61afef;
+    /* Light blue border */
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 5px;
+    width: 600px;
+    height: 450px;
+}
+textarea {
+    color: lightgreen;
+    font-size: 24px;
+    font-weight: bold;
+
+    background-color: #2c313a;
+    /* Dark gray/blue for input fields */
+    color: #1fff02;
+    /* Light gray text */
+    border: 1px solid #61afef;
+    /* Light blue border */
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 5px;
+    width: 600px;
+    height: 450px;
+}
+.spacer {
+    padding-left: 50px;
+      height: 100px;
+         width: 550px;
+     
+ }
+pre {
+ width: 600px;
+ white-space: pre-wrap;
+ word-wrap: break-word;
+ padding-left: 5px;
+}
+ul {
+ list-style-type: none;
+ padding-left: 0;
+}
+
+header { 
+ position: -webkit-sticky; 
+ position: sticky;
+ top: 0;
+ background-color: #c02b02;
+ padding: 10px 0;
+ font-size: 20px;
+ text-align: center;
+ margin-left: 50px;
+ width: 600px;
+ z-index: 1000;
+}
+
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+.content {
+    flex: 1;
+}
+footer {
+    position: absolute;
+    left: 50px;
+    bottom: 0;
+    width: 600px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    padding: 10px 0;
+    height: 50px;
+}
+.sticky {
+    position: -webkit-sticky;
+    /* Safari */
+    position: sticky;
+    top: 0;
+    background-color: #772805;
+    margin-left: 50px 0;
+    z-index: 1000;
+    margin-bottom: 25px;
+}
+.stickyfooter {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    bottom: 0;
+    background-color: #772805;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    z-index: 500;
+    margin: 0; /* Resetting the margin to avoid misalignment */
+}
+.espacer {
+    margin-left: 50px;
+    height: 100px;
+    width: 550px;
+}
+pre {
+    width: 600px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-left: 5px;
+}
+.setpre {
+    width: 600px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding-left: 5px;
+}
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+video {
+    width: 600px;
+    height: auto;
+    border: #bd2705 5px solid;
+}
+.highlight {
+    background-color: yellow;
+}
+h4{
+    color: #ffbb00;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+
+
+
+

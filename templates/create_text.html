@@ -1,0 +1,14 @@
+<!-- create_text.html -->{% extends 'base_.html' %}
+
+{% block title %}Search Results - My Blog{% endblock %}
+
+{% block content %}
+    <h2>Create a Five-Line Text Image</h2>
+    <form action="/create_text" method="post">
+        <textarea name="text" rows="20" cols="120"></textarea>
+        <br>
+        <input type="submit" value="Generate Image">
+    </form>
+    <br>
+    <img src="{{ url_for('static', filename='assets/512x512_text.jpg') }}" alt="Generated Text Image">
+{% endblock %}

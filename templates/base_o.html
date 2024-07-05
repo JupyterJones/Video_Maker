@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dark.css') }}">
+    <script>
+        function findString(str) {
+            if (parseInt(navigator.appVersion) < 4) return;
+
+            if (window.find) {
+                var strFound = window.find(str);
+                if (!strFound) {
+                    window.find(str, 0, 1);
+                }
+                if (strFound) {
+                    var range = window.getSelection().getRangeAt(0);
+                    var span = document.createElement("span");
+                    span.style.backgroundColor = "yellow";
+                    range.surroundContents(span);
+                }
+            } else if (navigator.appName.indexOf("Microsoft") != -1) {
+                // Not implemented for brevity
+            } else if (navigator.appName == "Opera") {
+                alert("Opera browsers not supported, sorry...");
+                return;
+            }
+
+            if (!strFound) alert("String '" + str + "' not found!");
+        }
+
+        function moveToNextOccurrence() {
+            var search_str = document.getElementById("search_input").value;
+            findString(search_str);
+        }
+    </script>
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body>
+    <div class="content">
+        <header>
+            <span>FlaskArchitect Video Maker</span>&nbsp;&nbsp;|&nbsp;&nbsp;<a
+                href="{{ url_for('editor') }}">Editor</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
+                href="{{ url_for('utilities') }}">Run Python</a>
+            <br />
+            <a href="{{ url_for('search') }}">Search</a>
+            <input type="text" id="search_input">
+            <button id="search_submit" onclick="moveToNextOccurrence()">
+                Find in page Next
+            </button>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{{ url_for('index_bash') }}">Run Bash</a>
+
+        </header>
+        <main class="spacer">
+            {% block content %}
+
+            {% endblock %}
+        </main>
+
+    </div>
+</body>
+</html>

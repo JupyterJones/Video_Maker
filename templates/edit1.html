@@ -1,0 +1,29 @@
+{% extends 'base_.html' %}
+
+{% block title %}Search Results - My Blog{% endblock %}
+
+{% block content %}
+<style>
+    .highlight {
+        background-color: yellow;
+    }
+</style>
+
+<body>
+  
+        <h1><a href="{{ url_for('home') }}">My Blog</a></h1>
+    <h3>Edit Text File - static/text_files/{{ filename }}</h3>
+    <input type="text" id="search_input" placeholder="Search text...">
+    <button type="button" onclick="moveToNextOccurrence()">Find Next</button>
+
+    <form action="{{ url_for('edit', filename=filename) }}" method="post">
+        <label for="text">Text:</label><br>
+        <pre id="text" name="text" rows="25" cols="60">{{ text }}</pre><br><br>
+        <textarea id="text" name="text" rows="25" cols="60" required>{{ text }}</textarea>
+        <br><br>
+        <button type="submit">Save Changes</button>
+    </form>
+
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,10 @@
+import subprocess
+def generate_text(query):
+    #use subprocess to run : askgpt query
+    subprocess.run(["askgpt", query])
+    return 
+
+if __name__ =='__main__':
+    query = 'What is the motivation behind developing AI?' 
+    generate_text(query)
+     

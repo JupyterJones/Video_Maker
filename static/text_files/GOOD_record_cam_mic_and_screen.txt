@@ -1,0 +1,9 @@
+this is the headset mic
+ffmpeg -f alsa -i plughw:0,0 -y 000.mp3
+
+camera mic nice and loud
+ffmpeg -f alsa -i plughw:1,0 -y 000.mp3
+
+record cam mic and screen
+ffmpeg -f alsa -i plughw:1,0 -f x11grab -framerate 30 -video_size 650x768 -i :0.0+45 -c:v libx264 -preset ultrafast -pix_fmt yuv420p -c:a aac -strict -2 -g 120 -f flv -y video3.fly
+

@@ -1,0 +1,20 @@
+<!-- templates/utilities.html -->
+{% extends 'base_.html' %}
+
+{% block title %}Utilities - My App{% endblock %}
+
+{% block content %}
+<body>
+    <h3>Utilities</h3>
+    <form action="{{ url_for('utilities') }}" method="POST">
+        <label for="filename">Filename:</label>
+        <input type="text" id="filename" name="filename" required>
+        <button type="submit">Run Script</button>
+    </form>
+
+    {% if result %}
+    <h3>Script Output:</h3>
+    <pre>{{ result }}</pre>
+    {% endif %}
+</body>
+{% endblock %}

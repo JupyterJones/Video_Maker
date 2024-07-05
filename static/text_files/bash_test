@@ -1,0 +1,8 @@
+#!/bin/bash
+echo $1
+echo '---------'
+data=$1
+echo '---------'
+echo $(date)
+echo '---------'
+echo $data

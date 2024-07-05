@@ -1,0 +1,80 @@
+@app.route('/search_txt', methods=['GET', 'POST'])
+def search_txt():
+    if request.method == 'POST' and 'phrase' in request.form:
+        phrase = request.form['phrase']
+        with open('chat.txt', 'r') as file:
+            lines = file.readlines()
+        results = []
+        for i, line in enumerate(lines):
+            if phrase in line:
+                start = max(0, i - 5)
+                end = min(len(lines), i + 6)
+                context = lines[start:end]
+                for j, context_line in enumerate(context):
+                    if phrase in context_line:
+                        phrase = phrase.strip()
+                        results.append(f'Line {start+j}: {context_line}')
+                    else:
+                        phrase = phrase.strip()
+                        results.append(f'Line {start+j}: {context_line}')
+        return render_template('results.html', results=results)
+    return render_template('search_txt.html')
+
+@app.route('/search_text', methods=['GET', 'POST'])
+def search_text():
+    if request.method == 'POST' and 'phrase' in request.form:
+        phrase = request.form['phrase']
+        with open('chat.txt', 'r') as file:
+            lines = file.readlines()
+        results = []
+        is_inside_route_declaration = False  # Flag to track if we are inside a route declaration
+        for i, line in enumerate(lines):
+            if phrase in line:
+                # Check if the line starts with '@app.route'
+                if line.strip().startswith('@app.route'):
+                    is_inside_route_declaration = True
+                    results.append(line.strip())  # Include the line without leading spaces
+                else:
+                    # Check if we are inside a route declaration and remove leading spaces
+                    if is_inside_route_declaration:
+                        results.append(line.strip())
+                    else:
+                        results.append(f'Line {i}: {line.strip()}')  # Include line numbers for other lines
+        return render_template('results.html', results=results)
+    return render_template('search_txt.html')
+----------------results.html
+1. Create a new file named `results.html` inside the `templates` directory (if it doesn't already exist).
+
+2. Edit the `results.html` file to include the following content:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <pre>
+    {% for result in results %}
+        {{ result }}
+    {% endfor %}
+    </pre>
+</body>
+</html>
+
+cat /mnt/HDD500/FlaskAppArchitect_Flask_App_Creator/app/app/templates/templates/search_text.html
+# -------- search.html ----------------
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Page</title>
+</head>
+<body>
+    <h1>Search</h1>
+    <form method="POST" action="{{ url_for('search_text') }}">
+        <input type="text" name="phrase" placeholder="Enter your search phrase">
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>
