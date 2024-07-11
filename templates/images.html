@@ -1,0 +1,23 @@
+{% extends 'base_.html' %}
+
+{% block title %}search.html{% endblock %}
+
+{% block content %}
+<div class="container">
+    <main>
+        <!--  images = glob.glob('/static/app_images/*.jpg')  -->
+
+        <h1>Image Gallery</h1>
+        {% for image in images %}
+        <p>{{ image }}</p><br/>
+        <img src="{{ url_for('static', filename='app_images/' + image) }}" alt="image" width="200" height="200"><br/><br/>
+    {% endfor %}
+    
+    </main>
+    <footer>
+        <p>&copy; 2024 FlaskArchitect Blog</p>
+    </footer>
+</div>
+{% endblock %}
+</body>
+</html>

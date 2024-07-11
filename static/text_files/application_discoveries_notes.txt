@@ -1,0 +1,4 @@
+An html file can be saved directly to templates by
+using the path in the filename:
+  ../../templates/filename.html
+That means I may be able to view it in Run_Bash

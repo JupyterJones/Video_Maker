@@ -1,0 +1,31 @@
+{% extends 'base_.html' %}
+
+{% block title %}Video Gallery{% endblock %}
+
+{% block content %}
+<div class="container">
+    <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .gallery video {
+            width: 200px;
+            height: auto;
+            border: #bd2705 5px solid;
+        }
+    </style>
+    <div class="gallery">
+        <p>Video Gallery</p><br/>
+        {% for video in videos %}
+            <div>
+                <video controls>
+                    <source src="{{ url_for('static', filename='videos/' + video) }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

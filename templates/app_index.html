@@ -1,0 +1,53 @@
+<!-- templates/index_base.html -->
+{% extends 'base_.html' %}
+
+{% block title %}index_base{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <body>
+    <h1>FlaskArchitect Video Maker Index</h1>
+
+    <ul>
+
+      <li><img src="{{ url_for('static', filename='images/00001.jpg') }}" alt="FlaskArchitect Logo"
+          style="width:100px;height:100px;">
+        </a></li><br />
+
+
+    </ul>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid;
+      }
+    </style>
+    </head>
+
+    <body>
+
+      <h2>Add a border to a table:</h2>
+
+      <table>
+        <tr>
+          <th><a href="{{ url_for('utilities') }}">Run Python</a></th>
+          <th><a href="{{ url_for('video_gallery') }}">video_gallery</a></th>
+        </tr>
+        <tr>
+          <td><a href="{{ url_for('index_base') }}">AI Links</a></td>
+          <td><a href="{{ url_for('index_code') }}">Code Completion</a></td>
+        </tr>
+        <tr>
+          <td><a href="{{ url_for('index_bash') }}">Run Bash</a></td>
+          <td><a href="{{ url_for('search_db') }}">SEARCH db</a></td>
+        </tr>
+      </table>
+
+
+</div>
+{% endblock %}
+</body>
+
+</html>

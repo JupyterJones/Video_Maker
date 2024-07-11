@@ -1,0 +1,37 @@
+{% extends 'base_.html' %}
+
+{% block title %}search.html{% endblock %}
+
+{% block content %}
+<div class="container">
+    <style>
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border: #bd2705 5px solid;
+        }
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 300px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery">
+        {% for image in images %}
+            <div>
+                <img src="{{ url_for('static', filename='app_images/' + image) }}" alt="image">
+            </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
+</body>
+</html>

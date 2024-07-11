@@ -1,11 +1,28 @@
-<!-- templates/utilities.html -->
 {% extends 'base_.html' %}
 
-{% block title %}Utilities - My App{% endblock %}
+{% block title %}Search Results - My Blog{% endblock %}
 
 {% block content %}
+<style>  
+    .highlight {
+        background-color: yellow; /* Set the background color to yellow or any other color you prefer */
+        color: black; /* Set the text color to black or any contrasting color */
+        font-weight: bold; /* Make the text bold to emphasize the highlight */
+    }
+</style>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 <body>
-    <h3>Utilities</h3>
-    <a href="{{ url_for('editor') }}">Editor</a> | <a href="{{ url_for('index_bash') }}">Run Bash</a> | <a href="{{ url_for('terminal_index') }}">Terminal</a>
-</body>
+    <h1><a href="{{ url_for('home') }}">My Blogs</a></h1>
+    <h3>Edit Text File - static/text_files/{{ filename }}</h3>
+    <input type="text" id="search_input" placeholder="Search text...">
+    <button type="button" onclick="moveToNextOccurrence()">Find Next</button>
+
+    <form action="{{ url_for('edit', filename=filename) }}" method="post">
+        <label for="text">Text:</label><br>
+        <textarea id="text" name="text" rows="25" cols="60" required>{{ text|safe }}</textarea>
+        <br><br>
+        <button type="submit">Save Changes</button>
+    </form>
 {% endblock %}
+</body>
+</html>

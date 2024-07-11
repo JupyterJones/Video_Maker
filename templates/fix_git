@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+import os
+
+def get_large_files(directory, size_limit_mb):
+    """
+    Walk through the directory and get files larger than the specified size limit.
+    """
+    large_files = []
+    size_limit_bytes = size_limit_mb * 1024 * 1024
+
+    for root, _, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if os.path.getsize(file_path) > size_limit_bytes:
+                large_files.append(file_path)
+    
+    return large_files
+
+def update_gitignore(large_files):
+    """
+    Add the list of large files to the .gitignore file if they are not already present.
+    """
+    gitignore_path = '.gitignore'
+    
+    # Read current .gitignore contents
+    if os.path.exists(gitignore_path):
+        with open(gitignore_path, 'r') as f:
+            gitignore_contents = f.read().splitlines()
+    else:
+        gitignore_contents = []
+
+    # Add large files to .gitignore if not present
+    new_entries = []
+    for file in large_files:
+        relative_path = os.path.relpath(file)
+        if relative_path not in gitignore_contents:
+            new_entries.append(relative_path)
+    
+    if new_entries:
+        with open(gitignore_path, 'a') as f:
+            for entry in new_entries:
+                f.write(entry + '\n')
+        print(f"Added {len(new_entries)} entries to {gitignore_path}")
+    else:
+        print("No new entries added to .gitignore")
+
+def main():
+    current_directory = os.getcwd()
+    large_files = get_large_files(current_directory, 40)
+    update_gitignore(large_files)
+
+if __name__ == "__main__":
+    main()

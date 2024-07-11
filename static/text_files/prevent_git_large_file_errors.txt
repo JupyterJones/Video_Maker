@@ -1,0 +1,186 @@
+python scan current directory/git project and add any files over 40mg to .gitignore
+filename: fix_git
+i want this to run from /usr/local/bin/
+ChatGPT
+
+Sure, Jack! Below is a Python script that scans the current directory and its subdirectories for files larger than 40MB, then adds those files to the .gitignore file if they aren't already listed. This script will be named fix_git and placed in /usr/local/bin/.
+Python Script: fix_git
+
+python
+
+#!/usr/bin/env python3
+
+import os
+
+def get_large_files(directory, size_limit_mb):
+    """
+    Walk through the directory and get files larger than the specified size limit.
+    """
+    large_files = []
+    size_limit_bytes = size_limit_mb * 1024 * 1024
+
+    for root, _, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if os.path.getsize(file_path) > size_limit_bytes:
+                large_files.append(file_path)
+    
+    return large_files
+
+def update_gitignore(large_files):
+    """
+    Add the list of large files to the .gitignore file if they are not already present.
+    """
+    gitignore_path = '.gitignore'
+    
+    # Read current .gitignore contents
+    if os.path.exists(gitignore_path):
+        with open(gitignore_path, 'r') as f:
+            gitignore_contents = f.read().splitlines()
+    else:
+        gitignore_contents = []
+
+    # Add large files to .gitignore if not present
+    new_entries = []
+    for file in large_files:
+        relative_path = os.path.relpath(file)
+        if relative_path not in gitignore_contents:
+            new_entries.append(relative_path)
+    
+    if new_entries:
+        with open(gitignore_path, 'a') as f:
+            for entry in new_entries:
+                f.write(entry + '\n')
+        print(f"Added {len(new_entries)} entries to {gitignore_path}")
+    else:
+        print("No new entries added to .gitignore")
+
+def main():
+    current_directory = os.getcwd()
+    large_files = get_large_files(current_directory, 40)
+    update_gitignore(large_files)
+
+if __name__ == "__main__":
+    main()
+
+Steps to Install and Use the Script
+
+    Save the Script:
+    Save the above script as fix_git (no file extension) in a directory on your system.
+
+    Make the Script Executable:
+
+    bash
+
+chmod +x /path/to/fix_git
+
+Move the Script to /usr/local/bin/:
+
+bash
+
+sudo mv /path/to/fix_git /usr/local/bin/fix_git
+
+Run the Script:
+Navigate to your git project directory and run:
+
+bash
+
+    fix_git
+
+This script will find all files larger than 40MB in the current directory and its subdirectories and add them to .gitignore if they aren't already listed. The script uses relative paths to ensure the .gitignore entries are correct regardless of the current working directory.
+this should prevent any large file errors correct ?
+ChatGPT
+
+Yes, this script will help prevent large file errors by ensuring that files larger than 40MB are added to the .gitignore file. This way, Git will ignore these large files and not attempt to add them to your repository, thus avoiding issues related to committing large files.
+
+Here's a recap of the script, its installation, and usage:
+Python Script: fix_git
+
+python
+
+#!/usr/bin/env python3
+
+import os
+
+def get_large_files(directory, size_limit_mb):
+    """
+    Walk through the directory and get files larger than the specified size limit.
+    """
+    large_files = []
+    size_limit_bytes = size_limit_mb * 1024 * 1024
+
+    for root, _, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if os.path.getsize(file_path) > size_limit_bytes:
+                large_files.append(file_path)
+    
+    return large_files
+
+def update_gitignore(large_files):
+    """
+    Add the list of large files to the .gitignore file if they are not already present.
+    """
+    gitignore_path = '.gitignore'
+    
+    # Read current .gitignore contents
+    if os.path.exists(gitignore_path):
+        with open(gitignore_path, 'r') as f:
+            gitignore_contents = f.read().splitlines()
+    else:
+        gitignore_contents = []
+
+    # Add large files to .gitignore if not present
+    new_entries = []
+    for file in large_files:
+        relative_path = os.path.relpath(file)
+        if relative_path not in gitignore_contents:
+            new_entries.append(relative_path)
+    
+    if new_entries:
+        with open(gitignore_path, 'a') as f:
+            for entry in new_entries:
+                f.write(entry + '\n')
+        print(f"Added {len(new_entries)} entries to {gitignore_path}")
+    else:
+        print("No new entries added to .gitignore")
+
+def main():
+    current_directory = os.getcwd()
+    large_files = get_large_files(current_directory, 40)
+    update_gitignore(large_files)
+
+if __name__ == "__main__":
+    main()
+
+Steps to Install and Use the Script
+
+    Save the Script:
+    Save the above script as fix_git (no file extension) in a directory on your system.
+
+    Make the Script Executable:
+
+    bash
+
+chmod +x /path/to/fix_git
+
+Move the Script to /usr/local/bin/:
+
+bash
+
+sudo mv /path/to/fix_git /usr/local/bin/fix_git
+
+Run the Script:
+Navigate to your git project directory and run:
+
+bash
+
+    fix_git
+
+Explanation
+
+    get_large_files(directory, size_limit_mb): This function scans the specified directory and its subdirectories for files larger than the given size limit (in MB).
+    update_gitignore(large_files): This function updates the .gitignore file with the paths of the large files if they are not already included.
+    main(): This function serves as the entry point, calling the other functions to scan the current directory and update the .gitignore file.
+
+By running this script before committing changes, you can ensure that large files (over 40MB) are ignored by Git, thus preventing large file errors and maintaining the health of your repository.

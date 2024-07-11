@@ -1,21 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'base_.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}edit_text.html{% endblock %}
 
 {% block content %}
-    <h1>Text File Editor</h1>
-    <h2>Existing Text Files-click filenames to edit</h2>
+    <h1>edit_text.html</h1>
+    <h2>Existing Text Files - click filenames to edit</h2>
     <ul>
         {% for file in files %}
             <li>
                 <a href="{{ url_for('edit', filename=file) }}">{{ file }}</a>&nbsp;&nbsp; | &nbsp;&nbsp;
                 <a style="color:red;" href="{{ url_for('delete', filename=file) }}">Delete</a>
             </li>
-   
         {% endfor %}
     </ul>
-    {% endblock %}
-   
-</body>
-</html>
-```
+    <form action="{{ url_for('edit_text') }}" method="post">
+        <label for="text">Text:</label><br>
+        <textarea id="text" name="text" rows="10" cols="60" required>{{ text }}</textarea><br><br>
+        <button type="submit">Save Changes</button>
+    </form>
+{% endblock %}

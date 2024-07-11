@@ -1,66 +1,43 @@
-var currentMatchIndex = 0;
-var matches = [];
-
 function findAndHighlight(str) {
-    // Remove previous highlights
     removeHighlights();
 
-    // Find all text nodes and highlight matches
-    var walker = document.createTreeWalker(
-        document.body,
-        NodeFilter.SHOW_TEXT,
-        null,
-        false
-    );
-
-    var regex = new RegExp(str, 'gi');
-    var node;
-    while ((node = walker.nextNode())) {
-        var match;
-        while ((match = regex.exec(node.nodeValue)) !== null) {
-            var span = document.createElement('span');
-            span.className = 'highlight';
-            var highlightedText = node.splitText(match.index);
-            highlightedText.splitText(match[0].length);
-            var highlightedNode = highlightedText.cloneNode(true);
-            span.appendChild(highlightedNode);
-            highlightedText.parentNode.replaceChild(span, highlightedText);
-            matches.push(span);
-        }
-    }
-
-    if (matches.length === 0) {
-        alert("String '" + str + "' not found!");
+    var textarea = document.getElementById("texts");
+    if (!textarea) {
+        alert("Textarea element not found.");
         return;
     }
 
-    // Reset currentMatchIndex after highlighting
-    currentMatchIndex = 0;
+    var text = textarea.value;
+    var matches = [];
+    var regex = new RegExp(str, 'gi');
+    var match;
+
+    while ((match = regex.exec(text)) !== null) {
+        matches.push({ start: match.index, end: match.index + match[0].length });
+    }
+
+    if (matches.length === 0) {
+        alert("String '" + str + "' not found in the textarea.");
+        return;
+    }
+
+    matches.forEach(function(match) {
+        var start = match.start;
+        var end = match.end;
+        
+        var prefix = text.substring(0, start);
+        var highlighted = text.substring(start, end);
+        var suffix = text.substring(end);
+        
+        textarea.value = prefix + '<span class="highlight">' + highlighted + '</span>' + suffix;
+    });
 }
 
 function removeHighlights() {
-    matches.forEach(function(span) {
-        var parent = span.parentNode;
-        parent.replaceChild(span.firstChild, span);
-        parent.normalize();
-    });
-    matches = [];
+    var textarea = document.getElementById("text");
+    if (textarea) {
+        textarea.value = textarea.value.replace(/<span class="highlight">(.*?)<\/span>/g, "$1");
+    }
 }
 
-function moveToNextOccurrence() {
-    var searchStr = document.getElementById("search_input").value.trim();
-    if (searchStr === "") {
-        alert("Please enter a search string.");
-        return;
-    }
-
-    if (matches.length === 0) {
-        alert("No matches found for '" + searchStr + "'.");
-        return;
-    }
-
-    // Move to next occurrence
-    var currentMatch = matches[currentMatchIndex];
-    currentMatch.scrollIntoView({ behavior: "smooth", block: "center" });
-    currentMatchIndex = (currentMatchIndex + 1) % matches.length;
-}
+// Rest of your script remains the same

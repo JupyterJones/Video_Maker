@@ -1,29 +1,84 @@
 {% extends 'base_.html' %}
 
-{% block title %}Search Results - My Blog{% endblock %}
+{% block title %}edit1.html{% endblock %}
 
 {% block content %}
-<style>
+<div class="container">
+<style>  
     .highlight {
-        background-color: yellow;
+        background-color: yellow; /* Set the background color to yellow or any other color you prefer */
+        color: black; /* Set the text color to black or any contrasting color */
+        font-weight: bold; /* Make the text bold to emphasize the highlight */
     }
 </style>
+<script>
+var currentMatchIndex = -1;
 
+function findAndHighlight(str) {
+    removeHighlights();
+
+    var textarea = document.getElementById("text");
+    if (!textarea) {
+        alert("Textarea element not found.");
+        return;
+    }
+
+    var text = textarea.value;
+    var matches = [];
+    var regex = new RegExp(str, 'gi');
+    var match;
+
+    while ((match = regex.exec(text)) !== null) {
+        matches.push({ start: match.index, end: match.index + match[0].length });
+    }
+
+    if (matches.length === 0) {
+        alert("String '" + str + "' not found in the textarea.");
+        return;
+    }
+
+    var htmlContent = text;
+    matches.forEach(function(match) {
+        var prefix = htmlContent.substring(0, match.start);
+        var highlighted = htmlContent.substring(match.start, match.end);
+        var suffix = htmlContent.substring(match.end);
+
+        htmlContent = prefix + '<span class="highlight">' + highlighted + '</span>' + suffix;
+    });
+
+    textarea.innerHTML = htmlContent;
+}
+function removeHighlights() {
+    var textarea = document.getElementById("text");
+    if (textarea) {
+        textarea.value = textarea.value.replace(/<span class="highlight">(.*?)<\/span>/g, "$1");
+    }
+}
+
+function moveToNextOccurrence() {
+    var searchStr = document.getElementById("search_input").value;
+    if (searchStr === "") {
+        alert("Please enter a search string.");
+        return;
+    }
+
+    findAndHighlight(searchStr);
+}
+</script>
 <body>
   
-        <h1><a href="{{ url_for('home') }}">My Blog</a></h1>
-    <h3>Edit Text File - static/text_files/{{ filename }}</h3>
-    <input type="text" id="search_input" placeholder="Search text...">
-    <button type="button" onclick="moveToNextOccurrence()">Find Next</button>
+<p><a href="{{ url_for('home') }}">edit1.html</a>&nbsp;&nbsp; | &nbsp;&nbsp;
+EDITING: static/text_files/&nbsp;&nbsp; | &nbsp;&nbsp;{{ filename }}&nbsp;&nbsp; | &nbsp;&nbsp;<a href="{{ url_for('index_code') }}" target="_blank">HINTS</a></p>
+<input type="text" id="search_input" placeholder="Search text...">
+<button type="button" onclick="moveToNextOccurrence()">Find Next</button>
 
-    <form action="{{ url_for('edit', filename=filename) }}" method="post">
-        <label for="text">Text:</label><br>
-        <pre id="text" name="text" rows="25" cols="60">{{ text }}</pre><br><br>
-        <textarea id="text" name="text" rows="25" cols="60" required>{{ text }}</textarea>
-        <br><br>
-        <button type="submit">Save Changes</button>
-    </form>
-
-    {% endblock %}
+<form action="{{ url_for('edit', filename=filename) }}" method="post">
+    <label for="text">Text:</label><br>
+    <textarea id="text" name="text" rows="25" cols="60" required>{{ text }}</textarea>
+    <br><br>
+    <button type="submit">Save Changes</button>
+</form>
+</div>
+{% endblock %}
 </body>
 </html>

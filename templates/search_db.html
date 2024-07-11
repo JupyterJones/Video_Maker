@@ -1,0 +1,147 @@
+<!-- search_db.html -->
+{% extends 'base_.html' %}
+
+{% block title %}search.html{% endblock %}
+
+{% block content %}
+<div class="container">
+<body>
+    <!-- Dark Theme
+    <style>
+        body {
+            background-color: black;
+            color: rgb(21, 187, 5);
+        }
+
+        a {
+            color: rgb(125, 187, 238);
+        }
+
+        pre {
+            color: rgb(21, 187, 5);
+            font-size: 24px;
+            font-weight: bold;
+            white-space: pre-wrap;  
+            word-break: break-all;
+            padding-top: 90px;
+        }
+
+        .note {
+            color: rgb(255, 230, 0);
+            font-size: 26px;
+        }
+
+        .sticky-header {
+            position: fixed;    
+            top: 0;
+            width: 600px;
+            background-color: rgb(97, 43, 17);
+            text-align: center!important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);   
+        }
+        .stickhead {
+            margin-top: 50px;
+            margin-left: 0px;
+            width: 600px;
+            background-color: rgb(97, 43, 17);
+            text-align: center!important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);   
+        }
+        header {
+            padding: 20px;
+            background-color: rgb(97, 43, 17);
+            text-align: center!important;  
+        }
+
+        h2 {
+            padding-top: -5px;
+            padding-bottom: -5px;
+        }
+
+        #search_submit {
+            background-color: rgb(97, 43, 17);
+            color: white;
+            border: 1px solid rgb(233, 190, 169);
+            padding: 10px 20px;
+            border-radius: 18px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        span {
+            color: rgb(238, 234, 6); 
+            font-weight: bold;
+            font-size: 24px;
+        }
+        pre {
+            width: 600px;
+            margin-top: 10px;
+            height: auto;
+            color: rgb(21, 187, 5);
+            font-size: 16px;
+            font-weight: bold;
+            white-space: pre-wrap;  
+            word-break: break-all;
+            padding-top: 10px;
+        }
+    </style> -->
+
+    <script>
+        // Function to find and highlight the search string
+        function findString(str) {
+            if (parseInt(navigator.appVersion) < 4) return;
+
+            // Check if find method is supported
+            if (window.find) {
+                // Find the search string
+                var strFound = window.find(str);
+                if (!strFound) {
+                    // If not found, try to find from the beginning
+                    window.find(str, 0, 1);
+                }
+                if (strFound) {
+                    // Highlight the found text
+                    var range = window.getSelection().getRangeAt(0);
+                    var span = document.createElement('span');
+                    span.style.backgroundColor = 'yellow';
+                    range.surroundContents(span);
+                }
+            } else if (navigator.appName.indexOf("Microsoft") != -1) {
+                // Handle Microsoft browsers
+                // Not implemented for brevity
+            } else if (navigator.appName == "Opera") {
+                // Handle Opera browsers
+                alert("Opera browsers not supported, sorry...");
+                return;
+            }
+
+            // If not found, show alert
+            if (!strFound) alert("String '" + str + "' not found!");
+        }
+
+        // Function to move cursor to next occurrence of search input
+        function moveToNextOccurrence() {
+            var search_str = document.getElementById("search_input").value;
+            findString(search_str);
+        }
+    </script>
+
+    <section class="stickhead">
+         <a class="note" href="/">Back to Home</a>
+        <form action="/search_db" method="post">
+            <input type="text" name="text" size="50">
+            <input type="submit" value="SEARCH Database: You may enter multiple terms separated by a comma">
+        </form>
+    </section>
+    <br>
+    {% for line in data %}
+    <pre>{{ line }}</pre>
+    {% endfor %}
+</div>
+ {% endblock %}   
+</body>
+</html>

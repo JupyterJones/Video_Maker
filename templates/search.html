@@ -1,14 +1,25 @@
 {% extends 'base_.html' %}
 
-{% block title %}Search Results - My Blog{% endblock %}
+{% block title %}search.html{% endblock %}
 
 {% block content %}
+<div class="container">
+
+<style>
+    pre {
+        font-size: 16px;
+        font-weight: bold;
+        white-space: pre-wrap;  
+        word-break: break-all;
+        padding-top: 90px;
+    }
+</style>
 <body>
     <h3>Edit Text File - {{ filename }}</h3>
     
     <h1>Search</h1>
     <form action="{{ url_for('search') }}" method="post">
-        <label for="search_terms">Search for (comma-separated):</label>
+        <label for="search_terms">Search for (comma-separated):<br/></label>
         <input type="text" id="search_terms" name="search_terms" required>
         <button type="submit">Search</button>
     </form>
@@ -27,7 +38,7 @@
     {% endif %}
  
     
-
+</div>
     {% endblock %}
 </body>
 </html>

@@ -4,11 +4,12 @@
 {% block title %}Search Results - My Blog{% endblock %}
 
 {% block content %}
+<div class="container">
 <h4>Example: bash static/text_files/bash_test 'jack-Desktop'</h4>
 <body>
     <form action="{{ url_for('run_bash') }}" method="POST">
         <label for="bash_command">Enter Bash Command:</label><br />
-        <textarea class="spacer" name="bash_command" id="bash_command"></textarea>
+        <textarea name="bash_command" id="bash_command"></textarea>
         <br>
         <button type="submit">Run Command</button>
     </form>
@@ -30,5 +31,6 @@
 
 
 </body>
+</div>
 {% endblock %}
 </html>

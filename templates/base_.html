@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dark.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark.css') }}">
     <script src="{{ url_for('static', filename='js/firstscript.js') }}"></script>
-
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
-
 <body>
-    <div class="content">
-        <header class="sticky">
-            <span>FlaskArchitect Video Maker</span>&nbsp;&nbsp;|&nbsp;&nbsp;<a
-                href="{{ url_for('editor') }}">Editor</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
-                href="{{ url_for('utilities') }}">Run Python</a>
-            <br />
-            <a href="{{ url_for('search') }}">Search</a>
-            <input type="text" id="search_input">
-            <button id="search_submit" onclick="moveToNextOccurrence()">
-                Find in page Next
-            </button>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{{ url_for('index_bash') }}">Run Bash</a>
-
-        </header>
-        <main class="spacer">
-            {% block content %}
-
-            {% endblock %}
-        </main>
-
-    </div>
+    <header class="sticky">
+        <span>FlaskArchitect Video Maker</span>  |  <a href="{{ url_for('editor') }}">Editor</a>  |  <a href="{{ url_for('utilities') }}">Run Python</a>
+        <br />
+        <a href="{{ url_for('search') }}">Search</a>
+        <input type="text" id="search_input">
+        <button id="search_submit" onclick="moveToNextOccurrence()">Find in page Next</button>  |  <a href="{{ url_for('index') }}">INDEX</a>
+    </header>
+    <main class="spacer">
+        {% block content %}
+        <!-- Add enough content to test scrolling -->
+        <div style="height: 2000px; background-color: #333;">
+            <p>Scroll down to see the sticky header in action.</p>
+            {% for line in data %}
+            <pre>{{ line }}</pre>
+            {% endfor %}
+        </div>
+        {% endblock %}
+    </main>
 </body>
 </html>

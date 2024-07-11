@@ -1,0 +1,30 @@
+#!/home/jack/miniconda3/envs/cloned_base/bin/python
+from sys import argv
+#SEARCH_TERM=input("SEARCH_TERM: ")
+SEARCH_TERM=argv[1]
+cnt =0
+linez =set()
+TEXT =['conversations_plus.txt','merged_file.txt']
+with open(f"/home/jack/Desktop/EDITOR/{TEXT[0]}","r") as data:
+    info=open('info2.txt','w')
+    try:
+        N=int(argv[2])
+        Lines = data.read()
+        INDEX='----SplitHere------'
+        Lines = Lines.replace(SEARCH_TERM,INDEX+SEARCH_TERM)
+        lines = Lines.split(INDEX)
+        for line in lines:
+            if SEARCH_TERM in line:
+                linez.add(line[:N])
+        for line in linez:
+            info.write(line+'\n')
+            print (line)
+            print('SPLIT20--------------------')
+
+        print(f"SOURCE: /home/jack/Desktop/EDITOR/{TEXT[0]}")
+        print('cat info2.txt | less')             
+    except:
+        print ("Search term not found") 
+        print ("Usage: python3 SEARCH_here SEARCH_TERM N")     
+info.close()
+print (len(lines))    

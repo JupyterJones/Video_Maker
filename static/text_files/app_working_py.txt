@@ -1,0 +1,316 @@
+from flask import Flask, render_template, request, redirect, url_for
+from flask import jsonify, send_file
+from flask import Blueprint
+from app import app
+import sqlite3
+import datetime
+import inspect
+import os
+#import blueprint
+from text_completion.sqlite3_editor import sqlite3_editor_bp
+app = Flask(__name__, template_folder='templates/exp')
+app.register_blueprint(sqlite3_editor_bp)
+app.config['DATABASE_'] = "databases/dialogueEXP2_app_f.db"
+DATABASE_ = "databases/dialogueEXP2_app_f.db"
+
+
+# Check if the database file exists
+if not os.path.exists(DATABASE_):
+    # If it doesn't exist, create it and initialize the necessary tables
+    conn = sqlite3.connect(DATABASE_)
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS dialogue (
+                    id INTEGER PRIMARY KEY,
+                    user_ChatGPT_PAIR TEXT,
+                    user_ChatGPT_PAIRb BLOB
+                 )''')
+    conn.commit()
+    conn.close()
+
+
+# Define logging function
+def logit(message):
+    try:
+        # Get the current timestamp
+        timestr = datetime.datetime.now().strftime('%A_%b-%d-%Y_%H-%M-%S')
+
+        # Get the caller's frame information
+        caller_frame = inspect.stack()[1]
+        filename = caller_frame.filename
+        lineno = caller_frame.lineno
+
+        # Convert message to string if it's a list
+        if isinstance(message, list):
+            message_str = ' '.join(map(str, message))
+        else:
+            message_str = str(message)
+
+        # Construct the log message with filename and line number
+        data_ = f"{timestr} - File: {filename}, Line: {lineno}: {message_str}\n"
+
+        # Open the log file in append mode
+        with open("log.txt", "a") as file:
+            # Get the current position in the file
+            file.seek(0, 2)
+            pos = file.tell()
+
+            # Write the log message to the file
+            file.write(data_)
+
+            # Print the log message to the console
+            #print(data_)
+
+            # Return the position as the ID
+            return pos
+    except Exception as e:
+        # If an exception occurs during logging, print an error message
+        print(f"Error occurred while logging: {e}")
+
+
+# Define function to connect to the database
+def connect_to_database(database):
+    try:
+        conn = sqlite3.connect(database)
+        logit("Connected to the database successfully.")
+        return conn
+    except Exception as e:
+        logit(f"Failed to connect to the database: {e}")
+        return None
+
+
+# Define function to create dialogue table
+def create_table(database):
+    try:
+        conn = connect_to_database(database)
+        if conn:
+            c = conn.cursor()
+            c.execute('''CREATE TABLE IF NOT EXISTS dialogue (
+                            id INTEGER PRIMARY KEY,
+                            user_ChatGPT_PAIR TEXT,
+                            user_ChatGPT_PAIRb BLOB
+                         )''')
+            conn.commit()
+            logit("Table 'dialogue' created successfully.")
+    except Exception as e:
+        logit(f"Failed to create table 'dialogue': {e}")
+
+
+# Define function to insert dialogue into the database
+def insert_dialogue(conn, dialogue_data):
+    try:
+        if conn:
+            c = conn.cursor()
+            c.execute("INSERT INTO dialogue (user_ChatGPT_PAIR, user_ChatGPT_PAIRb) VALUES (?, ?)",
+                      (dialogue_data, dialogue_data.encode('utf-8')))
+            conn.commit()
+            logit("Dialogue inserted into the database successfully.")
+    except Exception as e:
+        logit(f"Failed to insert dialogue into the database: {e}")
+
+
+# Define function to retrieve last dialogue from the database
+def get_last_dialogue(conn):
+    try:
+        if conn:
+            c = conn.cursor()
+            c.execute("SELECT id,user_ChatGPT_PAIRb FROM dialogue ORDER BY id DESC LIMIT 1")
+            dialogue = c.fetchone()
+            if dialogue:
+                return dialogue[0],dialogue[1].decode('utf-8')  # Decode dialogue from bytes to string
+    except Exception as e:
+        logit(f"Failed to retrieve last dialogue from the database: {e}")
+    return None
+
+
+# Define function to retrieve all dialogues from the database
+def get_all_dialogues(conn):
+    try:
+        if conn:
+            c = conn.cursor()
+            c.execute("SELECT id,user_ChatGPT_PAIRb FROM dialogue ORDER BY id DESC LIMIT 2")
+            dialogues = c.fetchall()
+            if dialogues:
+                return [dialogue[1].decode('utf-8') if isinstance(dialogue[1], bytes) else dialogue[1] for dialogue in dialogues]
+                # Decode dialogues from bytes to string only if it's a byte object
+    except Exception as e:
+        logit(f"Failed to retrieve all dialogues from the database: {e}")
+    return []
+
+
+@app.route('/')
+def index():
+    conn = connect_to_database(app.config['DATABASE_'])
+    #dialogues = get_all_dialogues(conn)
+    dialogues = get_last_dialogue(conn)
+    conn.close()
+    logit("Dialogues retrieved successfully.")
+    video='static/Nephilim_Kingdom.mp4'
+    logit(dialogues)
+    return render_template('index.html',dialogues = dialogues,video=video)
+
+
+# Route to display all dialogues
+@app.route('/index_f')
+def index_f():
+    conn = connect_to_database(app.config['DATABASE_'])
+    #dialogues = get_all_dialogues(conn)
+    dialogues = get_last_dialogue(conn)
+    conn.close()
+    logit("Dialogues retrieved successfully.")
+    logit(dialogues)
+    return render_template('index_f.html', dialogues=dialogues)
+def get_dialogue_by_id(conn, dialogue_id):
+    """
+    Retrieve dialogue by its ID from the database.
+    Args:
+        conn (sqlite3.Connection): The SQLite database connection.
+        dialogue_id (int): The ID of the dialogue to retrieve.
+    Returns:
+        str: The dialogue text.
+    """
+    try:
+        if conn:
+            c = conn.cursor()
+            c.execute("SELECT user_ChatGPT_PAIR FROM dialogue WHERE id=?", (dialogue_id,))
+            result = c.fetchone()
+            if result:
+                return result[0]#.decode('utf-8')  # Decode dialogue from bytes to string
+    except Exception as e:
+        logit(f"Failed to retrieve dialogue by ID from the database: {e}")
+    return None
+
+
+# Route to add a new dialogue
+@app.route('/add_dialogue', methods=['POST'])
+def add_dialogue():
+    new_dialogue = request.form['dialogue']
+    conn = connect_to_database(app.config['DATABASE_'])
+    insert_dialogue(conn, new_dialogue)
+    conn.close()
+    return redirect(url_for('index'))
+
+
+@app.route('/edit_dialogue', methods=['GET', 'POST'])
+def edit_dialogue():
+    if request.method == 'POST':
+        dialogue_id = request.form['dialogue_id']
+        return redirect(url_for('edit_dialogue_by_id', dialogue_id=dialogue_id))
+    return render_template('edit_dialogue_input_f.html')
+
+
+@app.route('/edit_dialogue/<int:dialogue_id>', methods=['GET'])
+def edit_dialogue_by_id(dialogue_id):
+    conn = connect_to_database(app.config['DATABASE_'])
+    current_dialogue = get_dialogue_by_id(conn, dialogue_id)
+    conn.close()
+    return render_template('edit_dialogue_f.html', dialogue_id=dialogue_id, current_dialogue=current_dialogue)
+
+
+@app.route('/update_dialogue/<int:dialogue_id>', methods=['POST','GET'])
+def update_dialogue(dialogue_id):
+    new_dialogue = request.form['new_dialogue']
+    logit(new_dialogue)
+    conn = connect_to_database(app.config['DATABASE_'])
+    try:
+        if conn:
+            c = conn.cursor()
+            c.execute("UPDATE dialogue SET user_ChatGPT_PAIR=? WHERE id=?", (new_dialogue, dialogue_id))
+            logit("-----------------in------------------\n")
+            logit(new_dialogue)#.encode('utf-8'))
+            logit("\n----------------out-------------------\n")
+            conn.commit()
+            logit("Dialogue updated successfully.")
+    except Exception as e:
+        logit(f"Failed to update dialogue in the database: {e}")
+    finally:
+        conn.close()
+    return redirect(url_for('index'))
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        search_query = request.form['query']
+        conn = connect_to_database(app.config['DATABASE_'])
+        search_results = perform_search(conn, search_query)
+        conn.close()
+        return render_template('search_results_f.html', search_query=search_query, search_results=search_results)
+    return render_template('search_form_f.html')
+
+
+def perform_search(conn, search_query):
+    try:
+        if conn:
+            c = conn.cursor()
+            # You'll need to modify the SQL query to match your database schema
+            logit(f"SEARCH: {search_query}")#search_query)
+            c.execute("SELECT * FROM dialogue WHERE user_ChatGPT_PAIRb LIKE ?", ('%' + search_query + '%',))
+            search_results = c.fetchall()
+            return search_results
+    except Exception as e:
+        logit(f"Failed to perform search: {e}")
+    return []
+
+
+@app.route('/search_phrases', methods=['GET', 'POST'])
+def search_phrases():
+    if request.method == 'POST':
+        search_query = request.form['search_term']
+        conn = connect_to_database(app.config['DATABASE_'])
+        search_results = perform_search(conn, search_query)
+        conn.close()
+        return render_template('search_results_f.html', search_query=search_query, search_results=search_results)
+    return render_template('search_terms_form_f.html')
+
+
+@app.route('/search_phrase', methods=['GET', 'POST'])
+def search_phrase():
+    search_term = request.args.get('search_term', '')
+    logit(search_term)
+    search_results = search_multiWord(search_term)
+    logit(f'SEARCH_RESULTS: {search_results}')
+    return render_template('search_resultz_f.html', results=search_results)
+
+
+def search_multiWord(search_term):
+    database_name = DATABASE_
+    conn = sqlite3.connect(database_name)
+    cursor = conn.cursor()
+    SEARCH_DATA = []
+    # Define the search terms
+    search_terms = search_term.split(",")  # Split the input string by space to get individual search terms
+    logit(search_terms)
+    # Construct the WHERE clause for the SQL query to filter rows based on all search terms
+    where_clause = " AND ".join([f"user_ChatGPT_PAIR LIKE '%{term}%'" for term in search_terms])
+    # Execute the SELECT query with the constructed WHERE clause
+    rows = cursor.execute(f"SELECT ROWID,* FROM dialogue WHERE {where_clause} LIMIT 2")
+    # Iterate over the resulting rows and format them as strings
+    for row in rows:
+        SEARCH_DATA.append(f"ROWID: {row[0]}\nUser: {row[1]}\nChatGPT: {row[2]}\n")
+    # Close the connection
+    conn.close()
+    logit(SEARCH_DATA)
+    return SEARCH_DATA
+
+
+@app.route('/indexx')
+def indexx():
+    return render_template('indexx_f.html')
+    # Import the Flask app from your main app file
+
+def list_routes(app):
+    output = []
+    for rule in app.url_map.iter_rules():
+        methods = ','.join(rule.methods)
+        route = f"{rule.endpoint}: {rule} [{methods}]"
+        output.append(route)
+    return output
+
+# Main function to create table and run the app
+if __name__ == "__main__":
+    routes = list_routes(app)
+    for route in routes:
+        print(route)
+    create_table(app.config['DATABASE_'])
+    print("port=5600")
+    app.run(debug=True,host='0.0.0.0',port=5100)
